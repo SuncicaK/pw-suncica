@@ -1,0 +1,22 @@
+{
+  "name": "pw-suncica",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SuncicaK/pw-suncica.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SuncicaK/pw-suncica/issues"
+  },
+  "homepage": "https://github.com/SuncicaK/pw-suncica#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.2"
+  }
+}
