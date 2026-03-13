@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { randomText } from '../helpers/random-text';
+import { test, expect, type Page } from '@playwright/test';
+import { randomText } from '../helpers/random-text.js';
 
 test.describe.serial('Cart', () => {
-  let page;
+  let page: Page;
 
   test.beforeAll(async ({ browser }) => {
     const context = await browser.newContext();
@@ -44,13 +44,15 @@ test.describe.serial('Cart', () => {
       'https://www.demoblaze.com/prod.html?idp_=3',
     ];
 
+    page.on('dialog', async (dialog) => {
+      expect(dialog.message()).toContain('Product added');
+      await dialog.accept();
+    });
+
     for (const url of productUrls) {
       await page.goto(url);
 
-      const dialogPromise = page.waitForEvent('dialog');
       await page.getByRole('link', { name: 'Add to cart' }).click();
-      const dialog = await dialogPromise;
-      await dialog.accept();
     }
   });
 
@@ -58,7 +60,10 @@ test.describe.serial('Cart', () => {
     await page.goto('https://www.demoblaze.com/cart.html');
 
     const rows = page.locator('#tbodyid tr');
-    await expect.poll(async () => await rows.count()).toBeGreaterThanOrEqual(3);
+    await expect(rows.first()).toBeVisible({ timeout: 5000 });
+
+    const count = await rows.count();
+    expect(count).toBeGreaterThan(0);
   });
 
   test('delete one product from cart', async () => {

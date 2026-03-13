@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { randomText } from '../helpers/random-text';
+import { randomText } from '../helpers/random-text.js';
 
 test.describe('Sign Up', () => {
   test.beforeEach(async ({ page }) => {

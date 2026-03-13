@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
-async function openContactModal(page) {
+async function openContactModal(page: Page) {
   await page.getByRole('link', { name: 'About us' }).click();
 }
 
@@ -12,9 +13,7 @@ test.describe('About us', () => {
   test('can open about us modal', async ({ page }) => {
     await page.getByRole('link', { name: 'About us' }).click();
 
-    await expect(
-      page.locator('div').filter({ hasText: 'Video Player is loading.Play' }).nth(3)
-    ).toBeVisible();
+    await expect(page.locator('.vjs-poster')).toBeVisible();
   });
 
   test('title is visible', async ({ page }) => {
@@ -42,7 +41,7 @@ test.describe('About us', () => {
 
     const videoIsPlaying = await page
       .locator('#example-video_html5_api')
-      .evaluate((v) => !v.paused);
+      .evaluate((v: HTMLVideoElement) => !v.paused);
     expect(videoIsPlaying).toBe(true);
   });
 

@@ -1,6 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
-async function openContactModal(page) {
+async function openContactModal(page: Page) {
   await page.getByRole('link', { name: 'Contact' }).click();
 }
 
@@ -48,19 +48,22 @@ test.describe('Contact', () => {
   test('submit form with valid data', async ({ page }) => {
     await openContactModal(page);
 
-    await page.fill('#recipient-email', 'test@example.com');
-    await page.fill('#recipient-name', 'Test User');
+    await page.locator('#recipient-email').fill('test@example.com');
 
-    await page.fill('#message-text', 'This is a test message.');
+    await page.getByRole('textbox', { name: 'Contact Email: Contact Name:' }).fill('Test User');
+
+    await page
+      .getByRole('textbox', { name: 'Contact Email: Contact Name:' })
+      .fill('This is a test message.');
     await page.getByRole('button', { name: 'Send message' }).click();
   });
 
   test('submit invalid data', async ({ page }) => {
     await openContactModal(page);
 
-    await page.fill('#recipient-email', 'invalid-email');
-    await page.fill('#recipient-name', 'Test User');
-    await page.fill('#message-text', '!@#$%^&*()');
+    await page.locator('#recipient-email').fill('invalid-email');
+    await page.getByRole('textbox', { name: 'Contact Email: Contact Name:' }).fill('Test User');
+    await page.getByRole('textbox', { name: 'Contact Email: Contact Name:' }).fill('!@#$%^&*()');
 
     page.once('dialog', (dialog) => {
       console.log(dialog.message());

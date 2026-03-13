@@ -6,7 +6,15 @@ test.describe('Home and Navigation', () => {
   });
 
   test('homepage loads correctly', async ({ page }) => {
+    await expect(page.getByRole('link', { name: 'Home (current)' })).toBeVisible();
+
     await expect(page.locator('#carouselExampleIndicators')).toBeVisible();
+
+    await expect(page.locator('#tbodyid')).toBeVisible();
+
+    const products = page.locator('.card');
+    const count = await products.count();
+    expect(count).toBeGreaterThan(0);
   });
 
   test('carousel functionality', async ({ page }) => {
