@@ -2,6 +2,7 @@
   "name": "pw-suncica",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {},
   "repository": {
@@ -17,6 +18,9 @@
   "homepage": "https://github.com/SuncicaK/pw-suncica#readme",
   "devDependencies": {
     "@playwright/test": "^1.58.2",
-    "@types/node": "^25.3.2"
+    "@types/node": "^25.5.0",
+    "prettier": "^3.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }
