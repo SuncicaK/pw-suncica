@@ -18,10 +18,10 @@ test.describe.serial('Cart', () => {
 
   test('cart loads correctly', async () => {
     await page.goto('cart.html');
-    await expect(page.getByRole('heading', { name: 'Products' })).toBeVisible();
-    await expect(page.getByRole('table')).toBeVisible();
+    await expect.soft(page.getByRole('heading', { name: 'Products' })).toBeVisible();
+    await expect.soft(page.getByRole('table')).toBeVisible();
 
-    await expect(page.getByRole('heading', { name: 'Total' })).toBeVisible();
+    await expect.soft(page.getByRole('heading', { name: 'Total' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Place Order' })).toBeVisible();
   });
 

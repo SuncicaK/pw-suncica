@@ -6,9 +6,9 @@ test.describe('Home and Navigation', () => {
   });
 
   test('homepage loads correctly', async ({ page }) => {
-    await expect(page.getByRole('link', { name: 'Home (current)' })).toBeVisible();
+    await expect.soft(page.getByRole('link', { name: 'Home (current)' })).toBeVisible();
 
-    await expect(page.locator('#carouselExampleIndicators')).toBeVisible();
+    await expect.soft(page.locator('#carouselExampleIndicators')).toBeVisible();
 
     await expect(page.locator('#tbodyid')).toBeVisible();
 
@@ -30,19 +30,21 @@ test.describe('Home and Navigation', () => {
   });
 
   test('main navigation exists', async ({ page }) => {
-    await expect(page.getByRole('link', { name: 'Home (current)' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Contact' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'About us' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Cart' })).toHaveAttribute('href', 'cart.html');
-    await expect(page.getByRole('link', { name: 'Log in' })).toBeVisible();
+    await expect.soft(page.getByRole('link', { name: 'Home (current)' })).toBeVisible();
+    await expect.soft(page.getByRole('link', { name: 'Contact' })).toBeVisible();
+    await expect.soft(page.getByRole('link', { name: 'About us' })).toBeVisible();
+    await expect
+      .soft(page.getByRole('link', { name: 'Cart' }))
+      .toHaveAttribute('href', 'cart.html');
+    await expect.soft(page.getByRole('link', { name: 'Log in' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Sign up' })).toBeVisible();
   });
 
   test('category section exists', async ({ page }) => {
     await page.locator('div').filter({ hasText: 'CATEGORIES Phones Laptops' }).nth(2).isVisible();
 
-    await expect(page.getByRole('link', { name: 'Phones' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Laptops' })).toBeVisible();
+    await expect.soft(page.getByRole('link', { name: 'Phones' })).toBeVisible();
+    await expect.soft(page.getByRole('link', { name: 'Laptops' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Monitors' })).toBeVisible();
   });
 

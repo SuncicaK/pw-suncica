@@ -12,10 +12,10 @@ test.describe('Log In', () => {
   });
 
   test('log in modal has correct fields and buttons', async ({ page }) => {
-    await expect(page.locator('#loginusername')).toBeVisible();
-    await expect(page.locator('#loginpassword')).toBeVisible();
+    await expect.soft(page.locator('#loginusername')).toBeVisible();
+    await expect.soft(page.locator('#loginpassword')).toBeVisible();
 
-    await expect(page.getByRole('button', { name: 'Log in' })).toBeVisible();
+    await expect.soft(page.getByRole('button', { name: 'Log in' })).toBeVisible();
     await expect(page.getByLabel('Log in').getByText('Close')).toBeVisible();
   });
 

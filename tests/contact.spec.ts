@@ -21,16 +21,18 @@ test.describe('Contact', () => {
 
   test('form fields are visible', async ({ page }) => {
     await openContactModal(page);
-    await expect(page.locator('#recipient-email')).toBeVisible();
+    await expect.soft(page.locator('#recipient-email')).toBeVisible();
 
-    await expect(page.getByRole('textbox', { name: 'Contact Email: Contact Name:' })).toBeVisible();
+    await expect
+      .soft(page.getByRole('textbox', { name: 'Contact Email: Contact Name:' }))
+      .toBeVisible();
     await expect(page.getByRole('textbox', { name: 'Message:' })).toBeVisible();
   });
 
   test('close and send buttons are visible', async ({ page }) => {
     await openContactModal(page);
 
-    await expect(page.getByRole('button', { name: 'Send message' })).toBeVisible();
+    await expect.soft(page.getByRole('button', { name: 'Send message' })).toBeVisible();
     await expect(page.getByLabel('New message').getByText('Close')).toBeVisible();
   });
 

@@ -12,10 +12,10 @@ test.describe('Sign Up', () => {
   });
 
   test('sign up modal has correct fields and buttons', async ({ page }) => {
-    await expect(page.getByRole('textbox', { name: 'Username:' })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: 'Password:' })).toBeVisible();
+    await expect.soft(page.getByRole('textbox', { name: 'Username:' })).toBeVisible();
+    await expect.soft(page.getByRole('textbox', { name: 'Password:' })).toBeVisible();
 
-    await expect(page.getByRole('button', { name: 'Sign up' })).toBeVisible();
+    await expect.soft(page.getByRole('button', { name: 'Sign up' })).toBeVisible();
     await expect(page.getByLabel('Sign up').getByText('Close')).toBeVisible();
   });
 
