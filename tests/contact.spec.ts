@@ -1,91 +1,86 @@
-import { test, expect, type Page } from '@playwright/test';
-
-async function openContactModal(page: Page) {
-  await page.getByRole('link', { name: 'Contact' }).click();
-}
+import { test, expect } from '@playwright/test';
+import { ContactModal } from '../pages/contact-modal.js';
 
 test.describe('Contact', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-  });
-
   test('can open modal', async ({ page }) => {
-    await page.getByRole('link', { name: 'Contact' }).click();
-    await expect(page.locator('#exampleModal')).toBeVisible();
+    await page.goto('/');
+    const contactModal = new ContactModal(page);
+    await contactModal.openModal();
+    await expect(contactModal.modal).toBeVisible();
   });
 
   test('title is visible', async ({ page }) => {
-    await openContactModal(page);
-    await expect(page.getByRole('heading', { name: 'New message' })).toBeVisible();
+    await page.goto('/');
+    const contactModal = new ContactModal(page);
+    await contactModal.openModal();
+    await expect(contactModal.heading).toBeVisible();
   });
 
   test('form fields are visible', async ({ page }) => {
-    await openContactModal(page);
-    await expect.soft(page.locator('#recipient-email')).toBeVisible();
-
-    await expect
-      .soft(page.getByRole('textbox', { name: 'Contact Email: Contact Name:' }))
-      .toBeVisible();
-    await expect(page.getByRole('textbox', { name: 'Message:' })).toBeVisible();
+    await page.goto('/');
+    const contactModal = new ContactModal(page);
+    await contactModal.openModal();
+    await expect.soft(contactModal.emailInput).toBeVisible();
+    await expect.soft(contactModal.nameInput).toBeVisible();
+    await expect(contactModal.messageInput).toBeVisible();
   });
 
   test('close and send buttons are visible', async ({ page }) => {
-    await openContactModal(page);
-
-    await expect.soft(page.getByRole('button', { name: 'Send message' })).toBeVisible();
-    await expect(page.getByLabel('New message').getByText('Close')).toBeVisible();
+    await page.goto('/');
+    const contactModal = new ContactModal(page);
+    await contactModal.openModal();
+    await expect.soft(contactModal.sendButton).toBeVisible();
+    await expect(contactModal.closeButton).toBeVisible();
   });
 
   test('submit empty form', async ({ page }) => {
-    await openContactModal(page);
-
+    await page.goto('/');
+    const contactModal = new ContactModal(page);
+    await contactModal.openModal();
     page.once('dialog', (dialog) => {
       console.log(dialog.message());
       dialog.accept();
     });
-
-    await page.getByRole('button', { name: 'Send message' }).click();
+    await contactModal.sendMessage();
   });
 
   test('submit form with valid data', async ({ page }) => {
-    await openContactModal(page);
-
-    await page.locator('#recipient-email').fill('test@example.com');
-
-    await page.getByRole('textbox', { name: 'Contact Email: Contact Name:' }).fill('Test User');
-
-    await page
-      .getByRole('textbox', { name: 'Contact Email: Contact Name:' })
-      .fill('This is a test message.');
-    await page.getByRole('button', { name: 'Send message' }).click();
+    await page.goto('/');
+    const contactModal = new ContactModal(page);
+    await contactModal.openModal();
+    await contactModal.fillEmail('test@example.com');
+    await contactModal.fillName('Test User');
+    await contactModal.fillMessage('This is a test message.');
+    await contactModal.sendMessage();
   });
 
   test('submit invalid data', async ({ page }) => {
-    await openContactModal(page);
-
-    await page.locator('#recipient-email').fill('invalid-email');
-    await page.getByRole('textbox', { name: 'Contact Email: Contact Name:' }).fill('Test User');
-    await page.getByRole('textbox', { name: 'Contact Email: Contact Name:' }).fill('!@#$%^&*()');
-
+    await page.goto('/');
+    const contactModal = new ContactModal(page);
+    await contactModal.openModal();
+    await contactModal.fillEmail('invalid-email');
+    await contactModal.fillName('Test User');
+    await contactModal.fillMessage('!@#$%^&*()');
     page.once('dialog', (dialog) => {
       console.log(dialog.message());
       dialog.accept();
     });
-
-    await page.getByRole('button', { name: 'Send message' }).click();
+    await contactModal.sendMessage();
   });
 
   test('close modal with close button', async ({ page }) => {
-    await openContactModal(page);
-
-    await page.getByLabel('New message').getByText('Close').click();
-    await expect(page.locator('#exampleModal')).toBeHidden();
+    await page.goto('/');
+    const contactModal = new ContactModal(page);
+    await contactModal.openModal();
+    await contactModal.closeWithButton();
+    await expect(contactModal.modal).toBeHidden();
   });
 
   test('close modal with X button', async ({ page }) => {
-    await openContactModal(page);
-
-    await page.getByRole('dialog', { name: 'New message' }).getByLabel('Close').click();
-    await expect(page.locator('#exampleModal')).toBeHidden();
+    await page.goto('/');
+    const contactModal = new ContactModal(page);
+    await contactModal.openModal();
+    await contactModal.closeWithX();
+    await expect(contactModal.modal).toBeHidden();
   });
 });
