@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
-import { randomText } from '../helpers/random-text.js';
+import { randomText } from './support/helpers/random-text.js';
+
 
 test.describe.serial('Cart', () => {
   let page: Page;

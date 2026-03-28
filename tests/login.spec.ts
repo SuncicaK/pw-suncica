@@ -1,11 +1,13 @@
-import { expect, test } from '../fixtures/index.js';
-import { randomText } from '../helpers/random-text.js';
+import { expect, test } from "./fixtures/index.js";
+import { randomText } from "./support/helpers/random-text.js";
+
 
 test.describe('Log In', () => {
+  test.beforeEach(async ({ loginModal }) => {
+    await loginModal.openModal();
+  });
   test('can open log in modal', async ({ loginModal }) => {
-    await expect(
-      loginModal.page.getByRole('heading', { name: 'Log in', exact: true })
-    ).toBeVisible();
+    await expect(loginModal.heading).toBeVisible(); 
   });
 
   test('log in modal has correct fields and buttons', async ({ loginModal }) => {
@@ -16,40 +18,24 @@ test.describe('Log In', () => {
   });
 
   test('cannot log in with empty fields', async ({ loginModal }) => {
-    loginModal.page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('Please fill out Username and Password.');
-      await dialog.accept();
-    });
-
+    await loginModal.handleDialog('Please fill out Username and Password.');
     await loginModal.clickLogin();
   });
 
   test('cannot log in with empty username', async ({ loginModal }) => {
-    loginModal.page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('Please fill out Username and Password.');
-      await dialog.accept();
-    });
-
-    await loginModal.fillUsername(randomText());
-    await loginModal.clickLogin();
+    await loginModal.handleDialog('Please fill out Username and Password.');
+    await loginModal.fillUsername(randomText()); 
+    await loginModal.clickLogin();               
   });
 
   test('cannot log in with empty password', async ({ loginModal }) => {
-    loginModal.page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('Please fill out Username and Password.');
-      await dialog.accept();
-    });
-
-    await loginModal.fillUsername(randomText());
+  await loginModal.handleDialog('Please fill out Username and Password.');
+    await loginModal.fillUsername(randomText()); 
     await loginModal.clickLogin();
   });
 
   test('cannot log in with invalid credentials', async ({ loginModal }) => {
-    loginModal.page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('User does not exist.');
-      await dialog.accept();
-    });
-
+    await loginModal.handleDialog('User does not exist.');
     await loginModal.login(randomText(), randomText());
   });
 
@@ -60,7 +46,6 @@ test.describe('Log In', () => {
 
   test('can log out after logging in', async ({ loginModal }) => {
     await loginModal.login('PW Suncica', 'pw-suncica');
-
     await loginModal.logout('PW Suncica');
     await expect(loginModal.welcomeLink('PW Suncica')).not.toBeVisible();
   });

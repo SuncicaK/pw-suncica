@@ -1,72 +1,47 @@
-import { test, expect } from '@playwright/test';
-import { randomText } from '../helpers/random-text.js';
+import { expect, test } from "./fixtures/index.js";
+import { randomText } from "./support/helpers/random-text.js";
+
 
 test.describe('Sign Up', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Sign up' }).click();
+  test.beforeEach(async ({ signUpModal }) => {
+    await signUpModal.openModal();
   });
 
-  test('can open sign up modal', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Sign up', exact: true })).toBeVisible();
+  test('can open sign up modal', async ({ signUpModal }) => {
+    await expect(signUpModal.heading).toBeVisible();
   });
 
-  test('sign up modal has correct fields and buttons', async ({ page }) => {
-    await expect.soft(page.getByRole('textbox', { name: 'Username:' })).toBeVisible();
-    await expect.soft(page.getByRole('textbox', { name: 'Password:' })).toBeVisible();
-
-    await expect.soft(page.getByRole('button', { name: 'Sign up' })).toBeVisible();
-    await expect(page.getByLabel('Sign up').getByText('Close')).toBeVisible();
+  test('sign up modal has correct fields and buttons', async ({ signUpModal }) => {
+    await expect.soft(signUpModal.usernameInput).toBeVisible();
+    await expect.soft(signUpModal.passwordInput).toBeVisible();
+    await expect.soft(signUpModal.signUpButton).toBeVisible();
+    await expect(signUpModal.closeButton).toBeVisible();
   });
 
-  test('cannot sign up with empty fields', async ({ page }) => {
-    page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('Please fill out Username and Password.');
-      await dialog.accept();
-    });
-
-    await page.getByRole('button', { name: 'Sign up' }).click();
+  test('cannot sign up with empty fields', async ({ signUpModal }) => {
+    await signUpModal.handleDialog('Please fill out Username and Password.');
+    await signUpModal.signUpButton.click();
   });
 
-  test('cannot sign up with empty username', async ({ page }) => {
-    page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('Please fill out Username and Password.');
-      await dialog.accept();
-    });
-
-    await page.getByRole('textbox', { name: 'Password:' }).fill(randomText());
-    await page.getByRole('button', { name: 'Sign up' }).click();
+  test('cannot sign up with empty username', async ({ signUpModal }) => {
+    await signUpModal.handleDialog('Please fill out Username and Password.');
+    await signUpModal.fillPassword(randomText());
+    await signUpModal.signUpButton.click();
   });
 
-  test('cannot sign up with empty password', async ({ page }) => {
-    page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('Please fill out Username and Password.');
-      await dialog.accept();
-    });
-
-    await page.getByRole('textbox', { name: 'Username:' }).fill(randomText());
-    await page.getByRole('button', { name: 'Sign up' }).click();
+  test('cannot sign up with empty password', async ({ signUpModal }) => {
+    await signUpModal.handleDialog('Please fill out Username and Password.');
+    await signUpModal.fillUsername(randomText());
+    await signUpModal.signUpButton.click();
   });
 
-  test('cannot sign up with existing credentials', async ({ page }) => {
-    page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('This user already exist.');
-      await dialog.accept();
-    });
-
-    await page.getByRole('textbox', { name: 'Username:' }).fill('test');
-    await page.getByRole('textbox', { name: 'Password:' }).fill('test');
-    await page.getByRole('button', { name: 'Sign up' }).click();
+  test('cannot sign up with existing credentials', async ({ signUpModal }) => {
+    await signUpModal.handleDialog('This user already exist.');
+    await signUpModal.signUp('test', 'test');
   });
 
-  test('can sign up with valid credentials', async ({ page }) => {
-    page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('Sign up successful.');
-      await dialog.accept();
-    });
-
-    await page.getByRole('textbox', { name: 'Username:' }).fill(randomText());
-    await page.getByRole('textbox', { name: 'Password:' }).fill(randomText());
-    await page.getByRole('button', { name: 'Sign up' }).click();
+  test('can sign up with valid credentials', async ({ signUpModal }) => {
+    await signUpModal.handleDialog('Sign up successful.');
+    await signUpModal.signUp(randomText(), randomText());
   });
 });

@@ -1,61 +1,42 @@
-import { test, expect } from '@playwright/test';
-import type { Page } from '@playwright/test';
+import { expect, test } from "./fixtures/index.js";
 
-async function openContactModal(page: Page) {
-  await page.getByRole('link', { name: 'About us' }).click();
-}
 
 test.describe('About us', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+  test.beforeEach(async ({ aboutModal }) => {
+    await aboutModal.openModal();
   });
 
-  test('can open about us modal', async ({ page }) => {
-    await page.getByRole('link', { name: 'About us' }).click();
-
-    await expect(page.locator('.vjs-poster')).toBeVisible();
+  test('can open about us modal', async ({ aboutModal }) => {
+    await expect(aboutModal.videoPoster).toBeVisible();
   });
 
-  test('title is visible', async ({ page }) => {
-    await openContactModal(page);
-    await expect(page.getByRole('heading', { name: 'About us', exact: true })).toBeVisible();
+  test('title is visible', async ({ aboutModal }) => {
+    await expect(aboutModal.heading).toBeVisible();
   });
 
-  test('play and pause video', async ({ page }) => {
-    await openContactModal(page);
-
-    await page.getByRole('button', { name: 'Play Video' }).click();
-    await page.getByRole('button', { name: 'Pause' }).click();
+  test('play and pause video', async ({ aboutModal }) => {
+    await aboutModal.play();
+    await aboutModal.pause();
   });
 
-  test('full screen video', async ({ page }) => {
-    await openContactModal(page);
-
-    await page.getByRole('button', { name: 'Play Video' }).click();
-    await page.getByRole('button', { name: 'Fullscreen' }).click();
+  test('full screen video', async ({ aboutModal }) => {
+    await aboutModal.play();
+    await aboutModal.fullscreen();
   });
 
-  test('video is playing', async ({ page }) => {
-    await openContactModal(page);
-    await page.getByRole('button', { name: 'Play Video' }).click();
-
-    const videoIsPlaying = await page
-      .locator('#example-video_html5_api')
-      .evaluate((v: HTMLVideoElement) => !v.paused);
-    expect(videoIsPlaying).toBe(true);
+  test('video is playing', async ({ aboutModal }) => {
+    await aboutModal.play();
+    const isPlaying = await aboutModal.isVideoPlaying();
+    expect(isPlaying).toBe(true);
   });
 
-  test('close modal with close button', async ({ page }) => {
-    await openContactModal(page);
-
-    await page.locator('#videoModal').getByText('Close', { exact: true }).click();
-    await expect(page.locator('#exampleModal')).toBeHidden();
+  test('close modal with close button', async ({ aboutModal }) => {
+    await aboutModal.closeWithButton();
+    await expect(aboutModal.videoPoster).toBeHidden();
   });
 
-  test('close modal with X button', async ({ page }) => {
-    await openContactModal(page);
-
-    await page.locator('#videoModal').getByLabel('Close').click();
-    await expect(page.locator('#exampleModal')).toBeHidden();
+  test('close modal with X button', async ({ aboutModal }) => {
+    await aboutModal.closeWithX();
+    await expect(aboutModal.videoPoster).toBeHidden();
   });
 });

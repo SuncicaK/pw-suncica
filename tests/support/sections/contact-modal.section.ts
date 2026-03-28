@@ -1,6 +1,6 @@
 import type { Page, Locator } from '@playwright/test';
 
-export class ContactModal {
+export class ContactModalSection {
   readonly page: Page;
   readonly modal: Locator;
   readonly contactLink: Locator;
@@ -28,6 +28,12 @@ export class ContactModal {
   async openModal() {
     await this.contactLink.click();
   }
+
+  async handleDialog() {
+  this.page.once('dialog', async (dialog) => {
+    await dialog.accept();
+  });
+} 
 
   async fillEmail(email: string) {
     await this.emailInput.fill(email);

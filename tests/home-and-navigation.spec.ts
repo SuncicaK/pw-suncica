@@ -1,103 +1,81 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from "./fixtures/index.js";
 
 test.describe('Home and Navigation', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-  });
 
-  test('homepage loads correctly', async ({ page }) => {
-    await expect.soft(page.getByRole('link', { name: 'Home (current)' })).toBeVisible();
+  test('homepage loads correctly', async ({ homeAndNavigation }) => {
+    await expect.soft(homeAndNavigation.homeLink).toBeVisible();
+    await expect.soft(homeAndNavigation.carousel).toBeVisible();
+    await expect.soft(homeAndNavigation.productsGrid).toBeVisible();
 
-    await expect.soft(page.locator('#carouselExampleIndicators')).toBeVisible();
-
-    await expect(page.locator('#tbodyid')).toBeVisible();
-
-    const products = page.locator('.card');
-    const count = await products.count();
+    const count = await homeAndNavigation.productCards.count();
     expect(count).toBeGreaterThan(0);
   });
 
-  test('carousel functionality', async ({ page }) => {
-    await page
-      .locator('#carouselExampleIndicators')
-      .getByRole('button', { name: 'Previous' })
-      .click();
-
-    //added reload to make sure the carousel animation is reset before clicking the next button
-    await page.reload();
-
-    await page.locator('#carouselExampleIndicators').getByRole('button', { name: 'Next' }).click();
+  test('carousel functionality', async ({ homeAndNavigation }) => {
+    await homeAndNavigation.clickPreviousCarousel();
+    await homeAndNavigation.reload();
+    await homeAndNavigation.clickNextCarousel();
   });
 
-  test('main navigation exists', async ({ page }) => {
-    await expect.soft(page.getByRole('link', { name: 'Home (current)' })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'Contact' })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'About us' })).toBeVisible();
-    await expect
-      .soft(page.getByRole('link', { name: 'Cart' }))
-      .toHaveAttribute('href', 'cart.html');
-    await expect.soft(page.getByRole('link', { name: 'Log in' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Sign up' })).toBeVisible();
+  test('main navigation exists', async ({ homeAndNavigation }) => {
+    await expect.soft(homeAndNavigation.homeLink).toBeVisible();
+    await expect.soft(homeAndNavigation.contactLink).toBeVisible();
+    await expect.soft(homeAndNavigation.aboutLink).toBeVisible();
+    await expect.soft(homeAndNavigation.cartLink).toHaveAttribute('href', 'cart.html');
+    await expect.soft(homeAndNavigation.loginLink).toBeVisible();
+    await expect(homeAndNavigation.signUpLink).toBeVisible();
   });
 
-  test('category section exists', async ({ page }) => {
-    await page.locator('div').filter({ hasText: 'CATEGORIES Phones Laptops' }).nth(2).isVisible();
-
-    await expect.soft(page.getByRole('link', { name: 'Phones' })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'Laptops' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Monitors' })).toBeVisible();
+  test('category section exists', async ({ homeAndNavigation }) => {
+    await expect.soft(homeAndNavigation.phonesLink).toBeVisible();
+    await expect.soft(homeAndNavigation.laptopsLink).toBeVisible();
+    await expect(homeAndNavigation.monitorsLink).toBeVisible();
   });
 
-  test('categories can be filtered by Phones', async ({ page }) => {
-    await page.getByRole('link', { name: 'Phones' }).click();
+  test('categories can be filtered by Phones', async ({ homeAndNavigation }) => {
+    await homeAndNavigation.filterByPhones();
 
     const nonPhones = ['MacBook', 'Dell', 'Apple', 'ASUS'];
-
     for (const product of nonPhones) {
-      await expect(page.getByRole('heading', { name: product })).toHaveCount(0);
+      await expect(homeAndNavigation.productHeading(product)).toHaveCount(0);
     }
   });
 
-  test('categories can be filtered by Laptops', async ({ page }) => {
-    await page.getByRole('link', { name: 'Laptops' }).click();
+  test('categories can be filtered by Laptops', async ({ homeAndNavigation }) => {
+    await homeAndNavigation.filterByLaptops();
 
     const nonLaptops = ['Samsung', 'Nexus', 'iPhone', 'Apple'];
-
     for (const product of nonLaptops) {
-      await expect(page.getByRole('heading', { name: product })).toHaveCount(0);
+      await expect(homeAndNavigation.productHeading(product)).toHaveCount(0);
     }
   });
 
-  test('categories can be filtered by Monitors', async ({ page }) => {
-    await page.getByRole('link', { name: 'Monitors' }).click();
+  test('categories can be filtered by Monitors', async ({ homeAndNavigation }) => {
+    await homeAndNavigation.filterByMonitors();
 
     const nonMonitors = ['Samsung', 'Nexus', 'iPhone', 'Sony', 'MacBook', 'Dell'];
-
     for (const product of nonMonitors) {
-      await expect(page.getByRole('heading', { name: product })).toHaveCount(0);
+      await expect(homeAndNavigation.productHeading(product)).toHaveCount(0);
     }
   });
 
-  test('product page navigation', async ({ page }) => {
-    const products = page.locator('#tbodyid .card-title');
-    const randomProduct = products.nth(Math.floor(Math.random() * (await products.count())));
-    await randomProduct.click();
-    await expect(page.locator('.name')).toBeVisible();
-
-    await page.getByRole('link', { name: 'PRODUCT STORE' }).click();
+  test('product page navigation', async ({ homeAndNavigation }) => {
+    await homeAndNavigation.clickRandomProduct();
+    await expect(homeAndNavigation.productName).toBeVisible();
+    await homeAndNavigation.clickLogoLink();
   });
 
-  test('product arrow navigation', async ({ page }) => {
-    const firstProduct = await page.locator('#tbodyid .card-title').first().textContent();
+  test('product arrow navigation', async ({ homeAndNavigation }) => {
+    const firstProduct = await homeAndNavigation.productCardTitles.first().textContent();
 
-    await page.locator('#next2').click();
-    await expect(page.locator('#tbodyid .card-title').first()).not.toHaveText(firstProduct || '');
+    await homeAndNavigation.clickNextPage();
+    await expect(homeAndNavigation.productCardTitles.first()).not.toHaveText(firstProduct || '');
 
-    await page.locator('#prev2').click();
-    await expect(page.locator('#tbodyid .card-title').first()).toBeVisible();
+    await homeAndNavigation.clickPrevPage();
+    await expect(homeAndNavigation.productCardTitles.first()).toBeVisible();
   });
 
-  test('footer visibility', async ({ page }) => {
-    await expect(page.locator('#footc')).toBeVisible();
+  test('footer visibility', async ({ homeAndNavigation }) => {
+    await expect(homeAndNavigation.footer).toBeVisible();
   });
 });
