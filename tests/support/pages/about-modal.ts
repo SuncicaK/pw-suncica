@@ -5,8 +5,8 @@ import type { Locator, Page } from "@playwright/test";
 
 export default class AboutModal {
   readonly page: Page;
-  private navbar: NavbarSection;
-  private modal: AboutModalSection;
+  readonly navbar: NavbarSection;
+  readonly modal: AboutModalSection;
   readonly heading: Locator;
   readonly videoPoster: Locator;
 
@@ -18,7 +18,7 @@ export default class AboutModal {
     this.videoPoster = this.modal.videoPoster;
   }
 
-  public async goto() {
+  async goto() {
     await this.page.goto('/');
   }
 

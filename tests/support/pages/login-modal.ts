@@ -4,8 +4,8 @@ import LoginModalSection from "../sections/login-modal.section.js";
 
 export default class LoginModal {
   readonly page: Page;
-  private navbar: NavbarSection;
-  private modal: LoginModalSection;
+  readonly navbar: NavbarSection;
+  readonly modal: LoginModalSection;
   readonly heading: Locator;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
@@ -23,7 +23,7 @@ export default class LoginModal {
     this.closeButton = this.modal.closeButton;
   }
 
-  public async goto() {
+   async goto() {
     await this.page.goto('/');
   }
 

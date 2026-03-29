@@ -1,11 +1,11 @@
 import type { Locator, Page } from "@playwright/test";
 import NavbarSection from "../sections/navbar.section.js";
-import { ContactModalSection } from "../sections/contact-modal.section.js";
+import ContactModalSection  from "../sections/contact-modal.section.js";
 
 export default class ContactModal {
   readonly page: Page;
-  private navbar: NavbarSection;
-  private modal: ContactModalSection;
+  readonly navbar: NavbarSection;
+  readonly modal: ContactModalSection;
   readonly modalLocator: Locator;
   readonly heading: Locator;
   readonly emailInput: Locator;
@@ -27,7 +27,7 @@ export default class ContactModal {
     this.closeButton = this.modal.closeButton;
   }
 
-  public async goto() {
+  async goto() {
     await this.page.goto('/');
   }
 

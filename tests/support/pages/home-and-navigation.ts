@@ -4,8 +4,8 @@ import HomeSection from "../sections/homepage.section.js";
 
 export default class HomeAndNavigation {
   readonly page: Page;
-  private navbar: NavbarSection;
-  private home: HomeSection;
+  readonly navbar: NavbarSection;
+  readonly home: HomeSection;
   readonly homeLink: Locator;
   readonly contactLink: Locator;
   readonly aboutLink: Locator;
@@ -43,7 +43,7 @@ export default class HomeAndNavigation {
     this.productName = this.home.productName;
   }
 
-  public async goto() {
+  async goto() {
     await this.page.goto('/');
   }
 

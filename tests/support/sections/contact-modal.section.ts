@@ -1,6 +1,6 @@
 import type { Page, Locator } from '@playwright/test';
 
-export class ContactModalSection {
+export default class ContactModalSection {
   readonly page: Page;
   readonly modal: Locator;
   readonly contactLink: Locator;

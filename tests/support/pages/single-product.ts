@@ -3,7 +3,7 @@ import SingleProductSection from "../sections/single-page.section.js";
 
 export default class SingleProduct {
   readonly page: Page;
-  private product: SingleProductSection;
+  readonly product: SingleProductSection;
   readonly image: Locator;
   readonly name: Locator;
   readonly heading: Locator;
@@ -22,7 +22,7 @@ export default class SingleProduct {
     this.addToCartButton = this.product.addToCartButton;
   }
 
-  public async goto() {
+  async goto() {
     await this.page.goto('/');
   }
   

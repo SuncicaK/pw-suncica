@@ -4,8 +4,8 @@ import SignUpModalSection from "../sections/sign-up-modal.section.js";
 
 export default class SignUpModal {
   readonly page: Page;
-  private navbar: NavbarSection;
-  private modal: SignUpModalSection;
+  readonly navbar: NavbarSection;
+  readonly modal: SignUpModalSection;
   readonly heading: Locator;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
@@ -23,7 +23,7 @@ export default class SignUpModal {
     this.closeButton = this.modal.closeButton;
   }
 
-  public async goto() {
+  async goto() {
     await this.page.goto('/');
   }
 
