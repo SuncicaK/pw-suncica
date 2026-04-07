@@ -1,7 +1,6 @@
-import type { Locator, Page } from "@playwright/test";
+import type { Locator, Page } from '@playwright/test';
 
-
-export default class SingleProductSection {
+export class SingleProductSection {
   readonly page: Page;
   readonly image: Locator;
   readonly name: Locator;
@@ -9,7 +8,7 @@ export default class SingleProductSection {
   readonly price: Locator;
   readonly description: Locator;
   readonly addToCartButton: Locator;
-  readonly firstProductLink: Locator; 
+  readonly firstProductLink: Locator;
 
   constructor(page: Page) {
     this.page = page;

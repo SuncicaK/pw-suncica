@@ -1,6 +1,6 @@
-import type { Locator, Page } from "@playwright/test";
+import type { Locator, Page } from '@playwright/test';
 
-export default class NavbarSection {
+export class NavbarSection {
   readonly page: Page;
   readonly homeLink: Locator;
   readonly contactLink: Locator;
@@ -17,29 +17,5 @@ export default class NavbarSection {
     this.cartLink = page.getByRole('link', { name: 'Cart' });
     this.loginLink = page.getByRole('link', { name: 'Log in' });
     this.signUpLink = page.getByRole('link', { name: 'Sign up' });
-  }
-
-  async goToHome() {
-    await this.homeLink.click();
-  }
-
-  async goToContact() {
-    await this.contactLink.click();
-  }
-
-  async goToAbout() {
-    await this.aboutLink.click();
-  }
-
-  async goToCart() {
-    await this.cartLink.click();
-  }
-
-  async goToLogin() {
-    await this.loginLink.click();
-  }
-
-  async goToSignUp() {
-    await this.signUpLink.click();
   }
 }

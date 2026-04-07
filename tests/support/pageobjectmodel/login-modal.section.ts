@@ -1,7 +1,6 @@
-import { expect, type Locator, type Page } from "@playwright/test";
+import { type Locator, type Page } from '@playwright/test';
 
-
-export default class LoginModalSection {
+export  class LoginModalSection {
   readonly page: Page;
   readonly heading: Locator;
   readonly usernameInput: Locator;
@@ -17,15 +16,6 @@ export default class LoginModalSection {
     this.loginButton = page.getByRole('button', { name: 'Log in' });
     this.closeButton = page.getByLabel('Log in').getByText('Close');
   }
-
-  async handleDialog(expectedMessage?: string) {
-  this.page.once('dialog', (dialog) => {
-    if (expectedMessage) {
-      expect(dialog.message()).toBe(expectedMessage);
-    }
-    dialog.accept();
-  });
-}
 
   async fillUsername(username: string) {
     await this.usernameInput.fill(username);

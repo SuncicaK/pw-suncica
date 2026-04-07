@@ -1,7 +1,6 @@
-import type { Locator, Page } from "@playwright/test";
+import type { Locator, Page } from '@playwright/test';
 
-
-export default class AboutModalSection {
+export class AboutModalSection {
   readonly page: Page;
   readonly heading: Locator;
   readonly videoPoster: Locator;
@@ -24,27 +23,7 @@ export default class AboutModalSection {
     this.videoElement = page.locator('#example-video_html5_api');
   }
 
-  async play() {
-    await this.playButton.click();
-  }
-
-  async pause() {
-    await this.pauseButton.click();
-  }
-
-  async fullscreen() {
-    await this.fullscreenButton.click();
-  }
-
   async isVideoPlaying(): Promise<boolean> {
     return this.videoElement.evaluate((v: HTMLVideoElement) => !v.paused);
-  }
-
-  async closeWithButton() {
-    await this.closeButton.click();
-  }
-
-  async closeWithX() {
-    await this.closeXButton.click();
   }
 }

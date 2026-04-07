@@ -1,6 +1,6 @@
-import type { Locator, Page } from "@playwright/test";
+import type { Locator, Page } from '@playwright/test';
 
-export default class HomeSection {
+export class HomeSection {
   readonly page: Page;
   readonly carousel: Locator;
   readonly productsGrid: Locator;
@@ -39,45 +39,9 @@ export default class HomeSection {
     return this.page.getByRole('heading', { name });
   }
 
-  async clickPreviousCarousel() {
-    await this.carouselPrevButton.click();
-  }
-
-  async clickNextCarousel() {
-    await this.carouselNextButton.click();
-  }
-
-  async reload() {
-    await this.page.reload();
-  }
-
-  async filterByPhones() {
-    await this.phonesLink.click();
-  }
-
-  async filterByLaptops() {
-    await this.laptopsLink.click();
-  }
-
-  async filterByMonitors() {
-    await this.monitorsLink.click();
-  }
-
-  async clickNextPage() {
-    await this.nextButton.click();
-  }
-
-  async clickPrevPage() {
-    await this.prevButton.click();
-  }
-
   async clickRandomProduct() {
     const count = await this.productCardTitles.count();
     const random = this.productCardTitles.nth(Math.floor(Math.random() * count));
     await random.click();
-  }
-
-  async clickLogoLink() {
-    await this.logoLink.click();
   }
 }

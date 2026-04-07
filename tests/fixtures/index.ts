@@ -1,17 +1,19 @@
 import { test as base } from '@playwright/test';
-import AboutModal from '../support/pages/about-modal.js';
-import HomeAndNavigation from '../support/pages/home-and-navigation.js';
-import LoginModal from '../support/pages/login-modal.js';
-import SignUpModal from '../support/pages/sign-up-modal.js';
-import SingleProduct from '../support/pages/single-product.js';
+import { NavbarSection } from '../support/pageobjectmodel/navbar.section.js';
+import { AboutModalSection } from '../support/pageobjectmodel/about-modal.section.js';
+import { HomeSection } from '../support/pageobjectmodel/homepage.section.js';
+import { LoginModalSection } from '../support/pageobjectmodel/login-modal.section.js';
+import { SignUpModalSection } from '../support/pageobjectmodel/sign-up.section.js';
+import { SingleProductSection } from '../support/pageobjectmodel/single-product.section.js';
 
 type PWFixtures = {
   forEachTest: void;
-  loginModal: LoginModal;
-  signUpModal: SignUpModal;
-  aboutModal: AboutModal;
-  homeAndNavigation: HomeAndNavigation;
-  singleProduct: SingleProduct;
+  navbar: NavbarSection;
+  aboutModal: AboutModalSection;
+  home: HomeSection;
+  loginModal: LoginModalSection;
+  signUpModal: SignUpModalSection;
+  singleProduct: SingleProductSection;
 };
 
 export const test = base.extend<PWFixtures>({
@@ -20,20 +22,23 @@ export const test = base.extend<PWFixtures>({
     await use();
   }, { auto: true }],
 
-  loginModal: async ({ page }, use) => {
-    await use(new LoginModal(page));
-  },
-  signUpModal: async ({ page }, use) => {
-    await use(new SignUpModal(page));
+  navbar: async ({ page }, use) => {
+    await use(new NavbarSection(page));
   },
   aboutModal: async ({ page }, use) => {
-    await use(new AboutModal(page));
+    await use(new AboutModalSection(page));
   },
-  homeAndNavigation: async ({ page }, use) => {
-    await use(new HomeAndNavigation(page));
+  home: async ({ page }, use) => {
+    await use(new HomeSection(page));
+  },
+  loginModal: async ({ page }, use) => {
+    await use(new LoginModalSection(page));
+  },
+  signUpModal: async ({ page }, use) => {
+    await use(new SignUpModalSection(page));
   },
   singleProduct: async ({ page }, use) => {
-    await use(new SingleProduct(page));
+    await use(new SingleProductSection(page));
   },
 });
 

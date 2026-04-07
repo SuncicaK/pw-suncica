@@ -1,9 +1,8 @@
 import type { Page, Locator } from '@playwright/test';
 
-export default class ContactModalSection {
+export class ContactModalSection {
   readonly page: Page;
   readonly modal: Locator;
-  readonly contactLink: Locator;
   readonly heading: Locator;
   readonly emailInput: Locator;
   readonly nameInput: Locator;
@@ -15,7 +14,6 @@ export default class ContactModalSection {
   constructor(page: Page) {
     this.page = page;
     this.modal = page.locator('#exampleModal');
-    this.contactLink = page.getByRole('link', { name: 'Contact' });
     this.heading = page.getByRole('heading', { name: 'New message' });
     this.emailInput = page.locator('#recipient-email');
     this.nameInput = page.getByRole('textbox', { name: 'Contact Email: Contact Name:' });
@@ -25,15 +23,15 @@ export default class ContactModalSection {
     this.closeXButton = page.getByRole('dialog', { name: 'New message' }).getByLabel('Close');
   }
 
-  async openModal() {
-    await this.contactLink.click();
+  
+  async goto() {
+    await this.page.goto('/');
   }
 
-  async handleDialog() {
-  this.page.once('dialog', async (dialog) => {
-    await dialog.accept();
-  });
-} 
+
+  async openModal() {
+    await this.page.getByRole('link', { name: 'Contact' }).click();
+  }
 
   async fillEmail(email: string) {
     await this.emailInput.fill(email);
@@ -49,13 +47,5 @@ export default class ContactModalSection {
 
   async sendMessage() {
     await this.sendButton.click();
-  }
-
-  async closeWithButton() {
-    await this.closeButton.click();
-  }
-
-  async closeWithX() {
-    await this.closeXButton.click();
   }
 }

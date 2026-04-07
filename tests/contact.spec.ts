@@ -1,24 +1,27 @@
-import {test, expect } from "@playwright/test";
-import ContactModal from "./support/pages/contact-modal.js";
+import { test, expect } from "@playwright/test";
 
+import { ContactModalSection } from "./support/pageobjectmodel/contact-modal.section.js";
+import { handleDialog } from "./support/helpers/dialog-helper.js";
 
 test.describe('Contact', () => {
+
+
   test('can open modal', async ({ page }) => {
-    const contactModal = new ContactModal(page);
+     const contactModal = new ContactModalSection(page);
     await contactModal.goto();
     await contactModal.openModal();
-    await expect(contactModal.modalLocator).toBeVisible();
+    await expect(contactModal.modal).toBeVisible();
   });
 
   test('title is visible', async ({ page }) => {
-    const contactModal = new ContactModal(page);
+    const contactModal = new ContactModalSection(page);
     await contactModal.goto();
     await contactModal.openModal();
     await expect(contactModal.heading).toBeVisible();
   });
 
   test('form fields are visible', async ({ page }) => {
-    const contactModal = new ContactModal(page);
+   const contactModal = new ContactModalSection(page);
     await contactModal.goto();
     await contactModal.openModal();
     await expect.soft(contactModal.emailInput).toBeVisible();
@@ -27,7 +30,7 @@ test.describe('Contact', () => {
   });
 
   test('close and send buttons are visible', async ({ page }) => {
-    const contactModal = new ContactModal(page);
+      const contactModal = new ContactModalSection(page);
     await contactModal.goto();
     await contactModal.openModal();
     await expect.soft(contactModal.sendButton).toBeVisible();
@@ -35,15 +38,15 @@ test.describe('Contact', () => {
   });
 
   test('submit empty form', async ({ page }) => {
-    const contactModal = new ContactModal(page);
+    const contactModal = new ContactModalSection(page);
     await contactModal.goto();
     await contactModal.openModal();
-    await contactModal.handleDialog();
+    await handleDialog(page);
     await contactModal.sendMessage();
   });
 
   test('submit form with valid data', async ({ page }) => {
-    const contactModal = new ContactModal(page);
+      const contactModal = new ContactModalSection(page);
     await contactModal.goto();
     await contactModal.openModal();
     await contactModal.fillEmail('test@example.com');
@@ -53,29 +56,29 @@ test.describe('Contact', () => {
   });
 
   test('submit invalid data', async ({ page }) => {
-    const contactModal = new ContactModal(page);
+    const contactModal = new ContactModalSection(page);
     await contactModal.goto();
     await contactModal.openModal();
     await contactModal.fillEmail('invalid-email');
     await contactModal.fillName('Test User');
     await contactModal.fillMessage('!@#$%^&*()');
-  await contactModal.handleDialog();
+    await handleDialog(page);
     await contactModal.sendMessage();
   });
 
   test('close modal with close button', async ({ page }) => {
-    const contactModal = new ContactModal(page);
+    const contactModal = new ContactModalSection(page);
     await contactModal.goto();
     await contactModal.openModal();
-    await contactModal.closeWithButton();
-    await expect(contactModal.modalLocator).toBeHidden();
+    await contactModal.closeButton.click();
+    await expect(contactModal.modal).toBeHidden();
   });
 
   test('close modal with X button', async ({ page }) => {
-    const contactModal = new ContactModal(page);
-    await contactModal.goto();
+    const contactModal = new ContactModalSection(page);
+    await contactModal.goto();        // CHANGED
     await contactModal.openModal();
-    await contactModal.closeWithX();
-    await expect(contactModal.modalLocator).toBeHidden();
+    await contactModal.closeXButton.click();
+    await expect(contactModal.modal).toBeHidden();
   });
 });
