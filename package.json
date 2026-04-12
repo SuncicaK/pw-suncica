@@ -5,8 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test",
-    "test:e2e": "npx playwright test --ignore=tests/visual-regression.spec.ts",
+     "test": "npx playwright test",
+    "test:e2e": "npx playwright test --grep-invert visual-regression",
     "test:visual": "npx playwright test tests/visual-regression.spec.ts",
     "test:visual:update": "npx playwright test tests/visual-regression.spec.ts --update-snapshots",
     "test:report": "npx playwright show-report"
