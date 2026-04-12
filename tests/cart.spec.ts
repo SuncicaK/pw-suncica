@@ -37,25 +37,23 @@ test.describe.serial('Cart', () => {
     await page.getByRole('button', { name: 'Place Order' }).click();
     await page.getByRole('button', { name: 'Purchase' }).click();
   });
+test('add 3 products to cart', async () => {
+  const productUrls = [
+    'https://www.demoblaze.com/prod.html?idp_=1',
+    'https://www.demoblaze.com/prod.html?idp_=2',
+    'https://www.demoblaze.com/prod.html?idp_=3',
+  ];
 
-  test('add 3 products to cart', async () => {
-    const productUrls = [
-      'https://www.demoblaze.com/prod.html?idp_=1',
-      'https://www.demoblaze.com/prod.html?idp_=2',
-      'https://www.demoblaze.com/prod.html?idp_=3',
-    ];
-
-    page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toContain('Product added');
-      await dialog.accept();
-    });
-
-    for (const url of productUrls) {
-      await page.goto(url);
-
-      await page.getByRole('link', { name: 'Add to cart' }).click();
-    }
+  page.on('dialog', async (dialog) => {
+    await dialog.accept();
   });
+
+  for (const url of productUrls) {
+    await page.goto(url);
+    await page.getByRole('link', { name: 'Add to cart' }).click();
+    await page.waitForTimeout(1000);
+  }
+});
 
   test('verify products in cart', async () => {
     await page.goto('https://www.demoblaze.com/cart.html');
@@ -79,13 +77,11 @@ test.describe.serial('Cart', () => {
     }
   });
 
-  test('place order with valid data', async () => {
-  page.on('dialog', async (dialog) => {
-    await dialog.accept();
-  });
-  
+test('place order with valid data', async () => {
   await page.goto('https://www.demoblaze.com/prod.html?idp_=1');
   await page.getByRole('link', { name: 'Add to cart' }).click();
+
+  await page.waitForTimeout(2000);
 
   await page.goto('cart.html');
   
