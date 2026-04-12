@@ -81,7 +81,10 @@ test.describe.serial('Cart', () => {
 
   test('place order with valid data', async () => {
     await page.goto('cart.html');
+    
     const rows = page.locator('#tbodyid tr');
+  
+    await rows.first().waitFor({ timeout: 10000 });
 
     await page.getByRole('button', { name: 'Place Order' }).click();
     await page.getByRole('textbox', { name: 'Total: Name:' }).fill(randomText());
