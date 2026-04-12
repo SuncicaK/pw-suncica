@@ -80,27 +80,33 @@ test.describe.serial('Cart', () => {
   });
 
   test('place order with valid data', async () => {
-    await page.goto('cart.html');
-    
-    const rows = page.locator('#tbodyid tr');
-  
-    await rows.first().waitFor({ timeout: 10000 });
-
-    await page.getByRole('button', { name: 'Place Order' }).click();
-    await page.getByRole('textbox', { name: 'Total: Name:' }).fill(randomText());
-    await page.getByRole('textbox', { name: 'Country:' }).fill(randomText());
-    await page.getByRole('textbox', { name: 'City:' }).fill(randomText());
-    await page.getByRole('textbox', { name: 'Credit card:' }).fill('4111111111111111');
-    await page.getByRole('textbox', { name: 'Month:' }).fill('12');
-    await page.getByRole('textbox', { name: 'Year:' }).fill('2025');
-
-    page.once('dialog', async (dialog) => {
-      expect(dialog.message()).toBe('Thank you for your purchase!');
-      await dialog.accept();
-    });
-
-    await page.getByRole('button', { name: 'Purchase' }).click();
-    await expect(page.getByRole('heading', { name: 'Thank you for your purchase!' })).toBeVisible();
-    await page.getByRole('button', { name: 'OK' }).click();
+  page.on('dialog', async (dialog) => {
+    await dialog.accept();
   });
+  
+  await page.goto('https://www.demoblaze.com/prod.html?idp_=1');
+  await page.getByRole('link', { name: 'Add to cart' }).click();
+
+  await page.goto('cart.html');
+  
+  const rows = page.locator('#tbodyid tr');
+  await rows.first().waitFor({ timeout: 10000 });
+
+  await page.getByRole('button', { name: 'Place Order' }).click();
+  await page.getByRole('textbox', { name: 'Total: Name:' }).fill(randomText());
+  await page.getByRole('textbox', { name: 'Country:' }).fill(randomText());
+  await page.getByRole('textbox', { name: 'City:' }).fill(randomText());
+  await page.getByRole('textbox', { name: 'Credit card:' }).fill('4111111111111111');
+  await page.getByRole('textbox', { name: 'Month:' }).fill('12');
+  await page.getByRole('textbox', { name: 'Year:' }).fill('2025');
+
+  page.once('dialog', async (dialog) => {
+    expect(dialog.message()).toBe('Thank you for your purchase!');
+    await dialog.accept();
+  });
+
+  await page.getByRole('button', { name: 'Purchase' }).click();
+  await expect(page.getByRole('heading', { name: 'Thank you for your purchase!' })).toBeVisible();
+  await page.getByRole('button', { name: 'OK' }).click();
+});
 });
