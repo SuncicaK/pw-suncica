@@ -4,7 +4,13 @@
   "description": "",
   "type": "module",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test",
+    "test:e2e": "npx playwright test --ignore=tests/visual-regression.spec.ts",
+    "test:visual": "npx playwright test tests/visual-regression.spec.ts",
+    "test:visual:update": "npx playwright test tests/visual-regression.spec.ts --update-snapshots",
+    "test:report": "npx playwright show-report"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SuncicaK/pw-suncica.git"
@@ -22,5 +28,8 @@
     "prettier": "^3.8.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.1"
   }
 }
