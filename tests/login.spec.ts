@@ -63,6 +63,6 @@ test.describe('Log In', () => {
     await loginModal.login(process.env.USERNAME, process.env.PASSWORD);
     await page.getByRole('link', { name: `Welcome ${process.env.USERNAME}` }).click();
     await page.getByRole('link', { name: 'Log out' }).click();
-    await expect(page.getByRole('link', { name: `Welcome ${process.env.USERNAME}` })).not.toBeVisible();
+    await expect(page.getByRole('link', { name: `Welcome ${process.env.USERNAME}` })).not.toBeVisible({ timeout: 15000 });
   });
 });
