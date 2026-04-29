@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
-
-import { ContactModalSection } from "./support/pageobjectmodel/contact-modal.section.js";
+import { ContactModalSection } from "../pages/contact-modal.section.js";
 import { handleDialog } from "./support/helpers/dialog-helper.js";
 
 test.describe('Contact', () => {

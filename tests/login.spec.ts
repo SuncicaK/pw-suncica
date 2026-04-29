@@ -1,6 +1,7 @@
-import { expect, test } from "./fixtures/index.js";
-import { handleDialog } from "./support/helpers/dialog-helper.js";
-import { randomText } from "./support/helpers/random-text.js";
+import { expect, test } from './fixtures/index.js';
+import { handleDialog } from './support/helpers/dialog-helper.js';
+import { randomText } from './support/helpers/random-text.js';
+import 'dotenv/config';
 
 test.describe('Log In', () => {
 
@@ -44,16 +45,24 @@ test.describe('Log In', () => {
   });
 
   test('can log in with valid credentials', async ({ page, navbar, loginModal }) => {
+    if (!process.env.USERNAME || !process.env.PASSWORD) {
+      throw new Error('Missing USERNAME or PASSWORD env variables');
+    }
+
     await navbar.loginLink.click();
-    await loginModal.login('PW Suncica', 'pw-suncica');
-    await expect(page.getByRole('link', { name: 'Welcome PW Suncica' })).toBeVisible();
+    await loginModal.login(process.env.USERNAME, process.env.PASSWORD);
+    await expect(page.getByRole('link', { name: `Welcome ${process.env.USERNAME}` })).toBeVisible();
   });
 
   test('can log out after logging in', async ({ page, navbar, loginModal }) => {
+    if (!process.env.USERNAME || !process.env.PASSWORD) {
+      throw new Error('Missing USERNAME or PASSWORD env variables');
+    }
+
     await navbar.loginLink.click();
-    await loginModal.login('PW Suncica', 'pw-suncica');
-    await page.getByRole('link', { name: 'Welcome PW Suncica' }).click();
+    await loginModal.login(process.env.USERNAME, process.env.PASSWORD);
+    await page.getByRole('link', { name: `Welcome ${process.env.USERNAME}` }).click();
     await page.getByRole('link', { name: 'Log out' }).click();
-    await expect(page.getByRole('link', { name: 'Welcome PW Suncica' })).not.toBeVisible();
+    await expect(page.getByRole('link', { name: `Welcome ${process.env.USERNAME}` })).not.toBeVisible();
   });
 });

@@ -1,10 +1,10 @@
 import { test as base } from '@playwright/test';
-import { NavbarSection } from '../support/pageobjectmodel/navbar.section.js';
-import { AboutModalSection } from '../support/pageobjectmodel/about-modal.section.js';
-import { HomeSection } from '../support/pageobjectmodel/homepage.section.js';
-import { LoginModalSection } from '../support/pageobjectmodel/login-modal.section.js';
-import { SignUpModalSection } from '../support/pageobjectmodel/sign-up.section.js';
-import { SingleProductSection } from '../support/pageobjectmodel/single-product.section.js';
+import { NavbarSection } from '../../pages/navbar.section.js';
+import { AboutModalSection } from '../../pages/about-modal.section.js';
+import { HomeSection } from '../../pages/homepage.section.js';
+import { LoginModalSection } from '../../pages/login-modal.section.js';
+import { SignUpModalSection } from '../../pages/sign-up.section.js';
+import { SingleProductSection } from '../../pages/single-product.section.js';
 
 type PWFixtures = {
   forEachTest: void;
