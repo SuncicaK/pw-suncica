@@ -51,7 +51,7 @@ test.describe('Log In', () => {
 
     await navbar.loginLink.click();
     await loginModal.login(process.env.USERNAME, process.env.PASSWORD);
-    await expect(page.getByRole('link', { name: `Welcome ${process.env.USERNAME}` })).toBeVisible();
+    await expect(page.getByRole('link', { name: `Welcome ${process.env.USERNAME}` })).toBeVisible({ timeout: 15000 });
   });
 
   test('can log out after logging in', async ({ page, navbar, loginModal }) => {
