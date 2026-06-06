@@ -1,0 +1,8 @@
+{
+  "id": 1,
+  "title": "Samsung galaxy s6",
+  "price": 360.0,
+  "cat": "phone",
+  "desc": "The Samsung Galaxy S6 is powered by 1.5GHz octa-core Samsung Exynos 7420 processor and it comes with 3GB of RAM.",
+  "img": "imgs/galaxy_s6.jpg"
+}

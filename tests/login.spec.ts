@@ -3,6 +3,8 @@ import { handleDialog } from './support/helpers/dialog-helper.js';
 import { randomText } from './support/helpers/random-text.js';
 import 'dotenv/config';
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Log In', () => {
 
   test('can open log in modal', async ({ navbar, loginModal }) => {

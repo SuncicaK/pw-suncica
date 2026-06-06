@@ -1,11 +1,14 @@
 import { test, expect, type Page } from '@playwright/test';
 import { randomText } from './support/helpers/random-text.js';
+import { STORAGE_STATE } from '../playwright.config.js';
+
+test.use({ storageState: STORAGE_STATE });
 
 test.describe.serial('Cart', () => {
   let page: Page;
 
   test.beforeAll(async ({ browser }) => {
-    const context = await browser.newContext();
+    const context = await browser.newContext({ storageState: STORAGE_STATE });
     page = await context.newPage();
     await page.goto('/');
     await page.evaluate(() => localStorage.clear());
@@ -72,43 +75,43 @@ test.describe.serial('Cart', () => {
       await expect(rows).toHaveCount(initialCount - 1);
     }
   });
-test('place order with valid data', async () => {
-  page.once('dialog', async (dialog) => {
-    await dialog.accept();
+
+  test('place order with valid data', async () => {
+    page.once('dialog', async (dialog) => {
+      await dialog.accept();
+    });
+
+    await page.goto('https://www.demoblaze.com/prod.html?idp_=1');
+    await page.getByRole('link', { name: 'Add to cart' }).click();
+
+    await page.goto('https://www.demoblaze.com/cart.html');
+
+    const rows = page.locator('#tbodyid tr');
+    await expect(rows.first()).toBeVisible();
+
+    await page.getByRole('button', { name: 'Place Order' }).click();
+
+    const modal = page.getByRole('dialog', { name: 'Place order' });
+    await expect(modal).toBeVisible();
+
+    await modal.getByRole('textbox', { name: /Name:/ }).fill(randomText());
+    await page.getByLabel('Country:').fill(randomText());
+    await page.getByLabel('City:').fill(randomText());
+    await page.getByLabel('Credit card:').fill('4111111111111111');
+    await page.getByLabel('Month:').fill('12');
+    await page.getByLabel('Year:').fill('2025');
+
+    page.once('dialog', async (dialog) => {
+      expect(dialog.message()).toBe('Thank you for your purchase!');
+      await dialog.accept();
+    });
+
+    await page.getByRole('button', { name: 'Purchase' }).click();
+
+    await expect(
+      page.getByRole('heading', { name: 'Thank you for your purchase!' })
+    ).toBeVisible();
+
+    await page.getByRole('button', { name: 'OK' }).click();
   });
-
-  await page.goto('https://www.demoblaze.com/prod.html?idp_=1');
-  await page.getByRole('link', { name: 'Add to cart' }).click();
-
-  await page.goto('https://www.demoblaze.com/cart.html');
-
-  const rows = page.locator('#tbodyid tr');
-  await expect(rows.first()).toBeVisible();
-
-  await page.getByRole('button', { name: 'Place Order' }).click();
-
-  const modal = page.getByRole('dialog', { name: 'Place order' });
-  await expect(modal).toBeVisible();
-
-
-  await modal.getByRole('textbox', { name: /Name:/ }).fill(randomText());
-  await page.getByLabel('Country:').fill(randomText());
-  await page.getByLabel('City:').fill(randomText());
-  await page.getByLabel('Credit card:').fill('4111111111111111');
-  await page.getByLabel('Month:').fill('12');
-  await page.getByLabel('Year:').fill('2025');
-
-  page.once('dialog', async (dialog) => {
-    expect(dialog.message()).toBe('Thank you for your purchase!');
-    await dialog.accept();
-  });
-
-  await page.getByRole('button', { name: 'Purchase' }).click();
-
-  await expect(
-    page.getByRole('heading', { name: 'Thank you for your purchase!' })
-  ).toBeVisible();
-
-  await page.getByRole('button', { name: 'OK' }).click();
-});
 });

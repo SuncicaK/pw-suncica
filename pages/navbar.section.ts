@@ -8,6 +8,7 @@ export class NavbarSection {
   readonly cartLink: Locator;
   readonly loginLink: Locator;
   readonly signUpLink: Locator;
+  readonly loggedInUser: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -17,5 +18,6 @@ export class NavbarSection {
     this.cartLink = page.getByRole('link', { name: 'Cart' });
     this.loginLink = page.getByRole('link', { name: 'Log in' });
     this.signUpLink = page.getByRole('link', { name: 'Sign up' });
+    this.loggedInUser = page.locator('#nameofuser');
   }
 }

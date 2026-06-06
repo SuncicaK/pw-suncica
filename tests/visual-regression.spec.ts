@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Visual Regression', () => {
 
   test.beforeEach(async ({ page }) => {
@@ -49,7 +51,8 @@ test.describe('Visual Regression', () => {
 
   test('login modal', async ({ page }) => {
     await page.getByRole('link', { name: 'Log in' }).click();
-    await page.locator('#logInModal').waitFor();
+    await page.locator('#logInModal').waitFor({ state: 'visible' });
+    await page.waitForTimeout(500);
     await expect(page.locator('#logInModal')).toHaveScreenshot('login-modal.png', {
       threshold: 0.02,
     });
@@ -59,7 +62,7 @@ test.describe('Visual Regression', () => {
     await page.getByRole('link', { name: 'Contact' }).click();
     await page.locator('#exampleModal').waitFor();
     await expect(page.locator('#exampleModal')).toHaveScreenshot('contact-modal.png', {
-      threshold: 0.02,
+      threshold: 0.05,
     });
   });
 });

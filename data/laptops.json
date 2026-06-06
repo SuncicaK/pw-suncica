@@ -1,0 +1,6 @@
+{
+  "Items": [
+    { "id": 8, "title": "Sony vaio i5", "price": 790.0, "cat": "notebook", "desc": "Mock laptop description", "img": "imgs/sony_vaio_5.jpg" }
+  ],
+  "LastEvaluatedKey": { "id": "8" }
+}

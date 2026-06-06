@@ -2,6 +2,8 @@ import { expect, test } from "./fixtures/index.js";
 import { handleDialog } from "./support/helpers/dialog-helper.js";
 import { randomText } from "./support/helpers/random-text.js";
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Sign Up', () => {
 
   test('can open sign up modal', async ({ navbar, signUpModal }) => {

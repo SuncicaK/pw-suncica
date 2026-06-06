@@ -1,0 +1,6 @@
+{
+  "Items": [
+    { "id": 10, "title": "Apple monitor 24", "price": 400.0, "cat": "monitor", "desc": "Mock monitor description", "img": "imgs/apple_mon.jpg" }
+  ],
+  "LastEvaluatedKey": { "id": "10" }
+}

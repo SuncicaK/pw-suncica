@@ -1,0 +1,6 @@
+{
+  "Items": [
+    { "id": 1, "title": "Samsung galaxy s6", "price": 360.0, "cat": "phone", "desc": "Mock phone description", "img": "imgs/galaxy_s6.jpg" }
+  ],
+  "LastEvaluatedKey": { "id": "1" }
+}

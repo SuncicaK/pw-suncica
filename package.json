@@ -4,13 +4,15 @@
   "description": "",
   "type": "module",
   "main": "index.js",
-  "scripts": {
-     "test": "npx playwright test",
-    "test:e2e": "npx playwright test --grep-invert visual-regression",
-    "test:visual": "npx playwright test tests/visual-regression.spec.ts",
-    "test:visual:update": "npx playwright test tests/visual-regression.spec.ts --update-snapshots",
-    "test:report": "npx playwright show-report"
-  },
+"scripts": {
+  "test": "npx playwright test",
+  "test:e2e": "npx playwright test --grep-invert visual-regression",
+  "test:visual": "npx playwright test tests/visual-regression.spec.ts",
+  "test:visual:update": "npx playwright test tests/visual-regression.spec.ts --update-snapshots",
+  "test:integration": "npx playwright test tests/integration.spec.ts",
+  "test:api": "npx playwright test tests/api-tests.spec.ts",
+  "test:report": "npx playwright show-report"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SuncicaK/pw-suncica.git"
