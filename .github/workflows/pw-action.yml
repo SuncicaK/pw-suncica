@@ -22,10 +22,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Browsers
-        run: npx playwright install chromium
-
-      - name: Install Playwright system deps
-        run: sudo npx playwright install-deps chromium
+        run: npx playwright install chromium --with-deps
 
       - name: Run API tests
         env:
@@ -46,6 +43,9 @@ jobs:
         run: npm run test:e2e
 
       - name: Run Visual Regression tests
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
         run: npm run test:visual
 
       - uses: actions/upload-artifact@v5
